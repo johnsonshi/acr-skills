@@ -12,9 +12,11 @@ See [README.md](README.md) for installation instructions, available skills, repo
 
 Skills follow the deep-knowledge-skill-creator pattern:
 
-- **SKILL.md**: Parent skill with YAML frontmatter (`name`, `description` with triggers), quick reference, and feature routing table
+- **SKILL.md**: Parent skill with YAML frontmatter (`name`, `description`), quick reference, and feature routing table
+- **SKILL.md frontmatter rule**: `description` must be a single-line string. Multi-line YAML block styles (`|` or `>`) are not supported.
 - **feature-area-skill-resources/{feature}/overview.md**: Synthesized knowledge per feature area
 - **investigation-reports/**: Raw research organized by phase
+- **investigation-reports/repository-layout/**: Directory layout report artifacts (for example `directory-structure.md`, `key-files.md`, `content-organization.md`)
 
 ## Feature Areas
 
