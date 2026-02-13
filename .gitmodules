@@ -1,0 +1,15 @@
+[submodule "submodules/azure-management-docs"]
+	path = submodules/azure-management-docs
+	url = https://github.com/MicrosoftDocs/azure-management-docs.git
+[submodule "submodules/acr"]
+	path = submodules/acr
+	url = https://github.com/Azure/acr.git
+[submodule "submodules/oras"]
+	path = submodules/oras
+	url = https://github.com/oras-project/oras.git
+[submodule "submodules/notation"]
+	path = submodules/notation
+	url = https://github.com/notaryproject/notation.git
+[submodule "submodules/ratify"]
+	path = submodules/ratify
+	url = https://github.com/notaryproject/ratify.git

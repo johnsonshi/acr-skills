@@ -1,0 +1,387 @@
+# Customer-Managed Keys Architecture
+
+## Overview
+
+This document describes the technical architecture of Customer-Managed Keys (CMK) implementation in Azure Container Registry, including component interactions, data flows, and security boundaries.
+
+## Architecture Components
+
+### 1. Azure Container Registry (ACR)
+- Premium tier registry with CMK encryption enabled
+- Stores encrypted container images and OCI artifacts
+- Manages encryption/decryption operations transparently
+
+### 2. Azure Key Vault
+- Stores the customer-managed encryption key
+- Provides cryptographic operations (wrap/unwrap)
+- Maintains audit logs of all key operations
+- Supports soft delete and purge protection
+
+### 3. Managed Identity
+- User-assigned or system-assigned managed identity
+- Authenticates ACR to Azure Key Vault
+- Requires specific permissions on the Key Vault
+
+### 4. Azure Storage
+- Backend storage managed by Azure
+- Stores encrypted registry content
+- Transparent to the customer
+
+## Component Diagram
+
+```
++------------------+          +-------------------+
+|                  |          |                   |
+|  Container       |  push/   |  Azure Container  |
+|  Client          +--------->+  Registry         |
+|  (Docker/Podman) |  pull    |  (Premium SKU)    |
+|                  |          |                   |
++------------------+          +--------+----------+
+                                       |
+                                       | uses
+                                       v
+                              +--------+----------+
+                              |                   |
+                              |  Managed Identity |
+                              |  (User/System)    |
+                              |                   |
+                              +--------+----------+
+                                       |
+                                       | authenticates
+                                       v
+                              +--------+----------+
+                              |                   |
+                              |  Azure Key Vault  |
+                              |                   |
+                              |  +-------------+  |
+                              |  | RSA Key     |  |
+                              |  | (CMK)       |  |
+                              |  +-------------+  |
+                              |                   |
+                              +--------+----------+
+                                       |
+                                       | audit logs
+                                       v
+                              +--------+----------+
+                              |                   |
+                              |  Azure Monitor    |
+                              |  / Log Analytics  |
+                              |                   |
+                              +-------------------+
+
++--------------------------------------------------+
+|                                                  |
+|  Azure Managed Storage (Backend)                 |
+|  +--------------------------------------------+  |
+|  |  Encrypted Registry Content                |  |
+|  |  - Container Images                        |  |
+|  |  - OCI Artifacts                           |  |
+|  |  - Manifests                               |  |
+|  +--------------------------------------------+  |
+|                                                  |
++--------------------------------------------------+
+```
+
+## Data Flow
+
+### Push Operation (Write Path)
+
+```
+1. Client pushes image to ACR
+        |
+        v
+2. ACR receives image layers and manifest
+        |
+        v
+3. ACR requests encryption key from Key Vault
+   (via Managed Identity)
+        |
+        v
+4. Key Vault returns wrapped DEK (Data Encryption Key)
+        |
+        v
+5. ACR encrypts content with DEK
+        |
+        v
+6. Encrypted content stored in Azure Storage
+        |
+        v
+7. ACR returns success to client
+```
+
+### Pull Operation (Read Path)
+
+```
+1. Client requests image from ACR
+        |
+        v
+2. ACR retrieves encrypted content from storage
+        |
+        v
+3. ACR requests key unwrap from Key Vault
+   (via Managed Identity)
+        |
+        v
+4. Key Vault unwraps DEK and returns it
+        |
+        v
+5. ACR decrypts content with DEK
+        |
+        v
+6. Decrypted content returned to client
+```
+
+## Key Hierarchy
+
+### Envelope Encryption Model
+
+CMK uses envelope encryption, a common pattern in cloud cryptography:
+
+```
++-----------------------------------+
+|  Key Encryption Key (KEK)         |
+|  - Stored in Azure Key Vault      |
+|  - RSA or RSA-HSM key             |
+|  - Customer-managed               |
+|  - Used to wrap/unwrap DEKs       |
++-----------------------------------+
+              |
+              | encrypts/decrypts
+              v
++-----------------------------------+
+|  Data Encryption Key (DEK)        |
+|  - Generated by ACR               |
+|  - Stored encrypted with KEK      |
+|  - Symmetric key (AES-256)        |
+|  - Used for actual data encryption|
++-----------------------------------+
+              |
+              | encrypts/decrypts
+              v
++-----------------------------------+
+|  Registry Content                 |
+|  - Container image layers         |
+|  - Manifests                      |
+|  - OCI artifacts                  |
++-----------------------------------+
+```
+
+## Identity and Access Architecture
+
+### Access Control Layers
+
+```
+Layer 1: Azure RBAC on Registry
++-----------------------------------------------+
+|  - AcrPush, AcrPull, Contributor roles        |
+|  - Controls who can push/pull images          |
++-----------------------------------------------+
+
+Layer 2: Key Vault Access Policy or RBAC
++-----------------------------------------------+
+|  - get, wrapKey, unwrapKey permissions        |
+|  - Controls identity access to CMK            |
++-----------------------------------------------+
+
+Layer 3: Network Security
++-----------------------------------------------+
+|  - Private endpoints                          |
+|  - Firewall rules                             |
+|  - Virtual network integration                |
++-----------------------------------------------+
+```
+
+### Identity Configuration Options
+
+#### Option A: Key Vault Access Policy
+
+```json
+{
+  "permissions": {
+    "keys": ["get", "wrapKey", "unwrapKey"]
+  },
+  "objectId": "<managed-identity-principal-id>",
+  "tenantId": "<azure-ad-tenant-id>"
+}
+```
+
+#### Option B: Azure RBAC
+
+```
+Role: Key Vault Crypto Service Encryption User
+Scope: Key Vault resource ID
+Principal: Managed identity
+```
+
+## Network Architecture
+
+### Standard Configuration
+
+```
++----------------+     +----------------+     +----------------+
+|                |     |                |     |                |
+|  Client        +---->+  ACR           +---->+  Key Vault     |
+|  (Internet)    |     |  (Public)      |     |  (Public)      |
+|                |     |                |     |                |
++----------------+     +----------------+     +----------------+
+```
+
+### Private Endpoint Configuration
+
+```
++----------------+     +----------------+     +----------------+
+|                |     |                |     |                |
+|  Client        +---->+  ACR Private   +---->+  Key Vault     |
+|  (VNet)        |     |  Endpoint      |     |  Private       |
+|                |     |                |     |  Endpoint      |
++----------------+     +----------------+     +----------------+
+        |                     |                     |
+        +---------------------+---------------------+
+                              |
+                       +------+------+
+                       |             |
+                       |  Azure VNet |
+                       |             |
+                       +-------------+
+```
+
+### Trusted Services Configuration
+
+When Key Vault has network restrictions:
+
+```
+Key Vault Firewall Rules:
++-----------------------------------------------+
+|  Allow trusted Azure services: YES            |
+|  Selected networks only: YES                  |
+|  IP rules: [specific IPs if needed]           |
++-----------------------------------------------+
+```
+
+## Geo-Replication Architecture
+
+For geo-replicated registries with CMK:
+
+```
+                    +-------------------+
+                    |                   |
+                    |  Azure Key Vault  |
+                    |  (Single region)  |
+                    |                   |
+                    +--------+----------+
+                             |
+              +--------------+--------------+
+              |              |              |
+              v              v              v
+     +--------+---+  +-------+----+  +------+-----+
+     |            |  |            |  |            |
+     | ACR Home   |  | ACR Replica|  | ACR Replica|
+     | (West US)  |  | (East US)  |  | (Europe)   |
+     |            |  |            |  |            |
+     +------------+  +------------+  +------------+
+```
+
+**Important Considerations:**
+- All replicas share the same CMK
+- Key Vault availability affects all regions
+- Plan for Key Vault failover scenarios
+- Consider Key Vault geo-redundancy options
+
+## Security Boundaries
+
+### Encryption at Rest
+
+```
++--------------------------------------------------+
+|  Azure Platform Encryption (Always On)           |
+|  +--------------------------------------------+  |
+|  |  Customer-Managed Key Encryption (CMK)     |  |
+|  |  +--------------------------------------+  |  |
+|  |  |  Registry Data                       |  |  |
+|  |  |  - Images, Artifacts, Manifests      |  |  |
+|  |  +--------------------------------------+  |  |
+|  +--------------------------------------------+  |
++--------------------------------------------------+
+```
+
+### Access Control Boundary
+
+```
+                  Authentication Boundary
+                           |
+    +----------------------|----------------------+
+    |                      |                      |
+    v                      v                      v
++--------+          +------+------+        +------+------+
+| Azure  |          |   Managed   |        |    Key      |
+|  AD    |          |   Identity  |        |   Vault     |
++--------+          +-------------+        +-------------+
+    |                      |                      |
+    | authenticates        | accesses             | provides
+    | users/apps           | Key Vault            | crypto ops
+    v                      v                      v
++--------------------------------------------------+
+|              Azure Container Registry            |
++--------------------------------------------------+
+```
+
+## Failure Modes and Recovery
+
+### Key Vault Unavailable
+
+```
+Impact: Registry operations fail (push/pull blocked)
+Detection: HTTP 403 errors, CMK_ERROR in health check
+Recovery: Restore Key Vault access, check network/permissions
+```
+
+### Managed Identity Deleted
+
+```
+Impact: Registry cannot access Key Vault
+Detection: CMK_ERROR in az acr check-health
+Recovery: Reassign identity, rotate to new identity if needed
+```
+
+### Key Deleted (Soft Delete Enabled)
+
+```
+Impact: Registry access blocked
+Detection: Pull/push failures
+Recovery: Recover key from soft-deleted state
+```
+
+## Resource Manager Schema
+
+### Registry with CMK Configuration
+
+```json
+{
+  "type": "Microsoft.ContainerRegistry/registries",
+  "apiVersion": "2019-12-01-preview",
+  "properties": {
+    "encryption": {
+      "status": "enabled",
+      "keyVaultProperties": {
+        "identity": "<managed-identity-client-id>",
+        "keyIdentifier": "https://<vault>.vault.azure.net/keys/<key>/<version>"
+      }
+    }
+  },
+  "identity": {
+    "type": "UserAssigned",
+    "userAssignedIdentities": {
+      "<identity-resource-id>": {}
+    }
+  },
+  "sku": {
+    "name": "Premium"
+  }
+}
+```
+
+## Source References
+
+- `/submodules/azure-management-docs/articles/container-registry/tutorial-enable-customer-managed-keys.md`
+- `/submodules/azure-management-docs/articles/container-registry/container-registry-geo-replication.md`
+- `/submodules/azure-management-docs/articles/container-registry/container-registry-storage.md`
