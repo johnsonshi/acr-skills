@@ -45,9 +45,19 @@ acr-skills/
     ├── acr/                              # Azure/acr GitHub repo
     ├── oras/                             # ORAS CLI source repo
     ├── oras-www/                         # ORAS documentation website repo
-    ├── notation/                         # Notation signing CLI
-    └── ratify/                           # Ratify verification engine
+    ├── notation/                         # Notation signing CLI source repo
+    └── ratify/                           # Ratify verification engine source repo
 ```
+
+## Key Documentation Paths
+
+| Source | Path | Content Type |
+|--------|------|--------------|
+| MS Learn | `submodules/azure-management-docs/articles/container-registry/` | ACR GA feature docs |
+| Azure/acr | `submodules/acr/docs/` | Preview features, samples, ARM templates |
+| Azure/acr | `submodules/acr/docs/preview/` | Connected registry, artifact streaming, continuous patching |
+| ORAS | `submodules/oras/` | ORAS CLI source code |
+| ORAS | `submodules/oras-www/` | ORAS documentation website |
 
 ## Contributing
 
