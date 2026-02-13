@@ -13,7 +13,14 @@ See [README.md](README.md) for installation instructions, available skills, repo
 Skills follow the deep-knowledge-skill-creator pattern:
 
 - **SKILL.md**: Parent skill with YAML frontmatter (`name`, `description`), quick reference, and feature routing table
-- **SKILL.md frontmatter rule**: `description` must be a single-line string. Multi-line YAML block styles (`|` or `>`) are not supported.
+- **SKILL.md frontmatter rules**:
+  - `description` must be a single-line YAML string. Multi-line YAML block styles (`|` or `>`) are not supported.
+  - Always quote `description` to avoid YAML parsing issues with special characters like `:`, `#`, `[`, and `]`.
+  - Choose quote style to avoid conflicts:
+    - Prefer double quotes when the text contains apostrophes (`'`).
+    - Prefer single quotes when the text contains many double quotes.
+    - If using double quotes, escape inner double quotes as `\"`.
+    - If using single quotes, escape apostrophes by doubling them (`''`).
 - **feature-area-skill-resources/{feature}/overview.md**: Synthesized knowledge per feature area
 - **investigation-reports/**: Raw research organized by phase
 - **investigation-reports/repository-layout/**: Directory layout report artifacts (for example `directory-structure.md`, `key-files.md`, `content-organization.md`)
