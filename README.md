@@ -1,10 +1,10 @@
 # ACR Skills
 
-Claude Code skills for Azure Container Registry (ACR) and container ecosystem tools.
+Skills for Azure Container Registry (ACR) and container ecosystem tools.
 
 ## Installation
 
-Add skills to your Claude Code environment using:
+Add skills to your environment using:
 
 ```bash
 # Add the ACR skill
@@ -15,7 +15,7 @@ npx skills add johnsonshi/acr-skills --skill acr
 
 | Skill | Status | Description |
 |-------|--------|-------------|
-| `acr` | Available | Comprehensive Azure Container Registry knowledge - authentication, networking, geo-replication, ACR Tasks, signing, artifact cache, and all 25 feature areas |
+| `acr` | Available | Comprehensive Azure Container Registry knowledge covering authentication, networking, geo-replication, ACR Tasks, signing, artifact cache, and more |
 
 ## Work in Progress
 
@@ -29,16 +29,7 @@ The following ecosystem tool skills are being actively developed:
 
 ## Skill Coverage
 
-### ACR Skill (25 Feature Areas)
-
-- **Authentication & Access**: Authentication, RBAC & Authorization
-- **Networking & Security**: Private Endpoints, Network Security, Data Loss Prevention, Dedicated Data Endpoints
-- **High Availability**: Geo-Replication, Zone Redundancy
-- **Build & Automation**: ACR Tasks, Task Agent Pools
-- **Security & Trust**: Content Trust & Signing, Vulnerability Scanning, Customer-Managed Keys, Continuous Patching
-- **Image & Artifact Operations**: Image Management, Artifact Cache, Artifact Streaming, OCI Artifacts
-- **Edge & Air-Gapped**: Connected Registry, ACR Transfer
-- **Lifecycle & Observability**: Soft Delete & Retention, Webhooks, Event Grid, Monitoring & Diagnostics, SKUs & Service Tiers
+The complete list of ACR feature areas is encoded in the skill itself (`skills/acr/SKILL.md`). Refer to the skill for the authoritative and up-to-date feature coverage.
 
 ## Repository Structure
 
@@ -47,7 +38,7 @@ acr-skills/
 ├── skills/
 │   └── acr/
 │       ├── SKILL.md                      # Main skill definition
-│       ├── feature-area-skill-resources/ # 25 feature-specific knowledge files
+│       ├── feature-area-skill-resources/ # Feature-specific knowledge files
 │       └── investigation-reports/        # Research documentation
 └── submodules/                           # Source documentation references
     ├── azure-management-docs/            # MS Learn docs
