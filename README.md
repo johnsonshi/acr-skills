@@ -39,10 +39,11 @@ acr-skills/
 │   └── acr/
 │       ├── SKILL.md                      # Main skill definition
 │       ├── feature-area-skill-resources/ # Feature-specific knowledge files
-│       └── investigation-reports/        # Research documentation
-└── submodules/                           # Source documentation references
-    ├── azure-management-docs/            # MS Learn docs repo containing ACR docs
-    ├── acr/                              # Azure/acr GitHub repo
+│       ├── investigation-reports/        # Research documentation
+│       └── submodules/                   # ACR-related source documentation
+│           ├── azure-management-docs/    # MS Learn docs repo containing ACR docs
+│           └── acr/                      # Azure/acr GitHub repo
+└── submodules/                           # Shared/ecosystem source documentation
     ├── oras/                             # ORAS CLI source repo
     ├── oras-www/                         # ORAS documentation website repo
     ├── notation/                         # Notation signing CLI source repo
@@ -53,9 +54,9 @@ acr-skills/
 
 | Source | Path | Content Type |
 |--------|------|--------------|
-| MS Learn | `submodules/azure-management-docs/articles/container-registry/` | ACR GA feature docs |
-| Azure/acr | `submodules/acr/docs/` | Preview features, samples, ARM templates |
-| Azure/acr | `submodules/acr/docs/preview/` | Connected registry, artifact streaming, continuous patching |
+| MS Learn | `skills/acr/submodules/azure-management-docs/articles/container-registry/` | ACR GA feature docs |
+| Azure/acr | `skills/acr/submodules/acr/docs/` | Preview features, samples, ARM templates |
+| Azure/acr | `skills/acr/submodules/acr/docs/preview/` | Connected registry, artifact streaming, continuous patching |
 | ORAS | `submodules/oras/` | ORAS CLI source code |
 | ORAS | `submodules/oras-www/` | ORAS documentation website |
 

@@ -117,5 +117,5 @@ Route to specific feature documentation based on the user's question:
 - `investigation-reports/feature-in-depth/` - Detailed per-feature research
 
 ### Submodules
-- `azure-management-docs/articles/container-registry/` - MS Learn documentation
-- `acr/` - Azure/acr GitHub repository with preview features and samples
+- `submodules/azure-management-docs/articles/container-registry/` - MS Learn documentation
+- `submodules/acr/` - Azure/acr GitHub repository with preview features and samples
