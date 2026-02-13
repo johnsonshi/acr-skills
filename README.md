@@ -8,7 +8,7 @@ Add skills to your Claude Code environment using:
 
 ```bash
 # Add the ACR skill
-npx @anthropic-ai/claude-code skills add johnsonshi/acr-skills --skill acr
+npx skills add johnsonshi/acr-skills --skill acr
 ```
 
 ## Available Skills

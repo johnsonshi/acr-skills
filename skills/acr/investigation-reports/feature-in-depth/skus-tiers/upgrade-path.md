@@ -26,8 +26,7 @@ Azure Container Registry allows you to change between service tiers (SKUs) as yo
 4. No feature changes (same feature set)
 
 **When to Upgrade:**
-- Approaching Basic storage limits (10 GiB)
-- Need more webhooks (Basic: 10, Standard: 100)
+- Need more webhooks (Basic: 2, Standard: 10)
 - Experiencing throughput limitations
 
 **CLI Command:**
@@ -159,13 +158,9 @@ az acr update --name myContainerRegistry --sku Basic
 ### Standard to Basic
 
 **Required Steps:**
-1. Ensure storage consumption is below Basic limit (100 GiB -> 10 GiB)
-2. Reduce webhook count if exceeding Basic limit (100 -> 10)
+1. Reduce webhook count if exceeding Basic limit (100 -> 2)
 
-**If Storage Exceeds Basic Limit:**
-- Delete unused images and repositories
-- Wait for storage metrics to update
-- Retry the downgrade
+> **Note**: All tiers support up to 40 TiB max storage capacity. The "included storage" differs by tier (Basic: 10 GiB, Standard: 100 GiB), but storage limits do not block downgrades—you'll simply pay overage charges for storage beyond the included amount.
 
 **CLI Command:**
 ```bash
@@ -219,8 +214,8 @@ az acr update --name myContainerRegistry --sku Standard
 ```
 
 **Benefits:**
-- 100 GiB storage (vs 10 GiB)
-- 100 webhooks (vs 10)
+- 100 GiB included storage (vs 10 GiB)
+- 10 webhooks (vs 2)
 - Higher throughput
 
 ### Scenario 2: Adding Multi-region Support

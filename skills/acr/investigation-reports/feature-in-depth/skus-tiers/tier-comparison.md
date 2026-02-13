@@ -11,13 +11,15 @@ This document provides a comprehensive feature comparison matrix across all Azur
 | Feature | Basic | Standard | Premium |
 |---------|-------|----------|---------|
 | Included Storage | 10 GiB | 100 GiB | 500 GiB |
-| Maximum Storage Limit | 100 GiB | 500 GiB | 4 TiB+ (contact support) |
-| Additional Storage Cost | Per-GB rate | Per-GB rate | Per-GB rate |
+| Maximum Storage Capacity | 40 TiB | 40 TiB | 40 TiB |
+| Additional Storage Cost | Per-GiB rate | Per-GiB rate | Per-GiB rate |
 | Image Throughput | Lower | Moderate | Highest |
 | API Concurrency | Lower | Moderate | Highest |
 | Bandwidth Throughput | Lower | Moderate | Highest |
 | Concurrent Read Operations | Limited | Moderate | High |
 | Concurrent Write Operations | Limited | Moderate | High |
+
+> **Note**: All tiers support the same maximum storage capacity of 40 TiB. The "Included Storage" is what's covered by the base tier price; any usage beyond this amount is billed at per-GiB rates.
 
 ### Authentication and Access Control
 

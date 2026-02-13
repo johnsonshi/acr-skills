@@ -15,7 +15,8 @@ Use this skill when answering questions about:
 
 | Feature | Basic | Standard | Premium |
 |---------|-------|----------|---------|
-| **Storage** | 10 GiB | 100 GiB | 500 GiB |
+| **Included Storage** | 10 GiB | 100 GiB | 500 GiB |
+| **Max Storage Capacity** | 40 TiB | 40 TiB | 40 TiB |
 | **Webhooks** | 2 | 10 | 500 |
 | **Geo-replication** | ❌ | ❌ | ✅ |
 | **Private endpoints** | ❌ | ❌ | ✅ |
@@ -40,11 +41,13 @@ Use this skill when answering questions about:
 
 ## Storage Limits
 
-| SKU | Included Storage | Overage |
-|-----|------------------|---------|
-| Basic | 10 GiB | Charged |
-| Standard | 100 GiB | Charged |
-| Premium | 500 GiB | Charged |
+All tiers support up to **40 TiB** maximum storage capacity. The "included storage" is what's covered by the base tier price; usage beyond this is charged per-GiB/month.
+
+| SKU | Included Storage | Max Capacity | Overage |
+|-----|------------------|--------------|---------|
+| Basic | 10 GiB | 40 TiB | Charged per-GiB |
+| Standard | 100 GiB | 40 TiB | Charged per-GiB |
+| Premium | 500 GiB | 40 TiB | Charged per-GiB |
 
 ## Throughput
 

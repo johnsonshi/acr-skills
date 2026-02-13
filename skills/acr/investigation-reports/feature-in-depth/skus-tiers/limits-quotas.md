@@ -6,13 +6,15 @@ Azure Container Registry enforces various limits and quotas based on the service
 
 ## Storage Limits
 
-### Included Storage by Tier
+### Included Storage vs Maximum Capacity
 
-| Tier | Included Storage | Maximum Storage |
-|------|------------------|-----------------|
-| Basic | 10 GiB | 100 GiB |
-| Standard | 100 GiB | 500 GiB |
-| Premium | 500 GiB | 4 TiB+ (contact support) |
+All ACR tiers support the same **maximum storage capacity of 40 TiB**. The difference between tiers is the "included storage" - the amount covered by the base tier price.
+
+| Tier | Included Storage | Max Capacity |
+|------|------------------|--------------|
+| Basic | 10 GiB | 40 TiB |
+| Standard | 100 GiB | 40 TiB |
+| Premium | 500 GiB | 40 TiB |
 
 ### Storage Characteristics
 - Additional storage beyond included amount is charged per-GB

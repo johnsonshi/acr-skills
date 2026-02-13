@@ -17,11 +17,13 @@ Comprehensive knowledge for Azure Container Registry - Microsoft's managed conta
 ## Quick Reference
 
 ### Service Tiers
-| SKU | Storage | Key Features |
-|-----|---------|--------------|
-| **Basic** | 10 GiB | Webhooks (2), zone redundancy |
-| **Standard** | 100 GiB | Webhooks (10), anonymous pull |
-| **Premium** | 500 GiB | Geo-replication, private endpoints, CMK, connected registry, artifact streaming |
+| SKU | Included Storage | Max Capacity | Key Features |
+|-----|------------------|--------------|--------------|
+| **Basic** | 10 GiB | 40 TiB | Webhooks (2), zone redundancy |
+| **Standard** | 100 GiB | 40 TiB | Webhooks (10), anonymous pull |
+| **Premium** | 500 GiB | 40 TiB | Geo-replication, private endpoints, CMK, connected registry, artifact streaming |
+
+> **Note**: All tiers support up to 40 TiB max storage capacity. Included storage is what's covered by the base price; additional storage is charged per-GiB.
 
 ### Common Commands
 ```bash

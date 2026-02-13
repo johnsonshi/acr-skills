@@ -13,11 +13,13 @@ Each tier has a daily rate that includes:
 - Included storage allocation
 - Core features for that tier
 
-| Tier | Included Storage | Primary Use Case |
-|------|------------------|------------------|
-| Basic | 10 GiB | Development/Testing |
-| Standard | 100 GiB | Production |
-| Premium | 500 GiB | Enterprise/Multi-region |
+| Tier | Included Storage | Max Capacity | Primary Use Case |
+|------|------------------|--------------|------------------|
+| Basic | 10 GiB | 40 TiB | Development/Testing |
+| Standard | 100 GiB | 40 TiB | Production |
+| Premium | 500 GiB | 40 TiB | Enterprise/Multi-region |
+
+> **Note**: All tiers support the same maximum storage capacity of 40 TiB. "Included Storage" is what's covered by the base price; additional usage is billed per-GiB.
 
 **Pricing Reference**: [Azure Container Registry Pricing](https://azure.microsoft.com/pricing/details/container-registry/)
 
