@@ -1,6 +1,6 @@
 # ACR Skills
 
-Skills for Azure Container Registry (ACR) and container ecosystem tools.
+Agent skills for Azure Container Registry (ACR) and container ecosystem tools.
 
 ## Installation
 
@@ -41,9 +41,10 @@ acr-skills/
 │       ├── feature-area-skill-resources/ # Feature-specific knowledge files
 │       └── investigation-reports/        # Research documentation
 └── submodules/                           # Source documentation references
-    ├── azure-management-docs/            # MS Learn docs
+    ├── azure-management-docs/            # MS Learn docs repo containing ACR docs
     ├── acr/                              # Azure/acr GitHub repo
-    ├── oras/                             # ORAS CLI source
+    ├── oras/                             # ORAS CLI source repo
+    ├── oras-www/                         # ORAS documentation website repo
     ├── notation/                         # Notation signing CLI
     └── ratify/                           # Ratify verification engine
 ```

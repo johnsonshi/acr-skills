@@ -13,3 +13,6 @@
 [submodule "submodules/ratify"]
 	path = submodules/ratify
 	url = https://github.com/notaryproject/ratify.git
+[submodule "submodules/oras-www"]
+	path = submodules/oras-www
+	url = https://github.com/oras-project/oras-www
