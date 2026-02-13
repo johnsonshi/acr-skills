@@ -62,7 +62,15 @@ acr-skills/
 
 ## Contributing
 
-Skills are built from comprehensive research of official documentation and source code. Each skill follows the deep-knowledge pattern with:
+Skills in this repo are built using the [johnsonshi/skills365/deep-knowledge-skill-creator](https://github.com/johnsonshi/skills365) skill workflow, which systematically converts documentation repositories into comprehensive skills through multi-phase investigation.
+
+To use the skill creator:
+
+```bash
+npx skills add johnsonshi/skills365 --skill deep-knowledge-skill-creator
+```
+
+Each skill follows the deep-knowledge pattern with:
 
 1. **SKILL.md** - Parent skill with frontmatter, quick reference, and feature routing
 2. **feature-area-skill-resources/** - Synthesized knowledge per feature area
